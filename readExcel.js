@@ -108,9 +108,9 @@ async function readExcelFile() {
 
     // 활동 내역 생성
     for (let row = ACTIVYTY_ROW_INDEX; row <= sheet.rowCount; row++) {
-      const activityName = sheet.getCell(`D${row}`).text;
+      const activityTitle = sheet.getCell(`D${row}`).text;
 
-      if (!activityName) {
+      if (!activityTitle) {
         continue;
       }
 
@@ -124,6 +124,7 @@ async function readExcelFile() {
         year: activityYear,
         season: activitySeason,
         period: activityPeriod,
+        title: activityTitle,
         details: activityDetails,
         extraLink: activityExtraLink,
         image: images[sheetId] && images[sheetId][`G${row}`],
