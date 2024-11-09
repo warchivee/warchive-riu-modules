@@ -89,6 +89,7 @@ async function readExcelFile() {
     if (!results[schoolCode]) {
       results[schoolCode] = {
         name: schoolName, // 객체 초기화
+        code: schoolCode,
         groups: {},
       };
     }
@@ -96,6 +97,7 @@ async function readExcelFile() {
     if (!results[schoolCode].groups[groupcode]) {
       results[schoolCode].groups[groupcode] = {
         name: groupName, // 객체 초기화
+        code: groupcode,
         establishedAt:
           new Date(establishedAt)?.toLocaleDateString("en-CA") ?? "", // yyyy-mm-dd
         snsLink,
