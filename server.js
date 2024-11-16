@@ -1,18 +1,18 @@
 import express from "express";
 import cors from "cors";
-import readExcelFile from "./readExcel.js";
+import parseExcelFile from "./parse.js";
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 
-app.get("/api/data", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
-    const results = await readExcelFile();
+    const results = await parseExcelFile();
     res.json(results);
   } catch (error) {
-    res.status(500).json({ error: "Error reading Excel file" });
+    res.status(500).json({ error: "Error parsing Excel file" });
     console.error(error);
   }
 });

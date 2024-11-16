@@ -17,9 +17,6 @@ dependencies:
   sharp:
     specifier: ^0.33.5
     version: 0.33.5
-  zlib:
-    specifier: ^1.0.5
-    version: 1.0.5
 
 packages:
 
@@ -1293,9 +1290,4 @@ packages:
       archiver-utils: 3.0.4
       compress-commons: 4.1.2
       readable-stream: 3.6.2
-    dev: false
-
-  /zlib@1.0.5:
-    resolution: {integrity: sha512-40fpE2II+Cd3k8HWTWONfeKE2jL+P42iWJ1zzps5W51qcTsOUKM5Q5m2PFb0CLxlmFAaUuUdJGc3OfZy947v0w==}
-    engines: {node: '>=0.2.0'}
     dev: false

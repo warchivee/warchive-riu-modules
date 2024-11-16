@@ -3,7 +3,21 @@ import sharp from "sharp";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 
-async function readExcelFile() {
+//yyyy-mm-dd 로 입력하거나 yyyy-mm 으로 입력한 경우가 있어 분기처리
+function validDate(cellValue) {
+  if (typeof cellValue === "string") {
+    return cellValue; // 원래 문자열 그대로 반환
+  }
+
+  if (cellValue instanceof Date) {
+    const date = new Date(cellValue);
+    return isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-CA");
+  }
+
+  return "";
+}
+
+async function parseExcelFile() {
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile("./original.xlsx"); // 엑셀 파일 경로
 
@@ -83,7 +97,8 @@ async function readExcelFile() {
     });
 
     // 동아리 정보 생성
-    const establishedAt = sheet.getCell("B4").text;
+    const establishedAt = sheet.getCell("B4").value;
+    const disbandedAt = sheet.getCell("C4").value;
     const snsLink = sheet.getCell("B5").text;
 
     if (!results[schoolCode]) {
@@ -98,8 +113,8 @@ async function readExcelFile() {
       results[schoolCode].groups[groupcode] = {
         name: groupName, // 객체 초기화
         code: groupcode,
-        establishedAt:
-          new Date(establishedAt)?.toLocaleDateString("en-CA") ?? "", // yyyy-mm-dd
+        establishedAt: validDate(establishedAt),
+        disbandedAt: validDate(disbandedAt),
         snsLink,
         logo: images[sheetId] && images[sheetId]["E2"],
         activities: [],
@@ -132,7 +147,20 @@ async function readExcelFile() {
     }
   });
 
+  // JSON 파일 저장
+  const outputDir = "riu/output";
+  if (!existsSync(outputDir)) {
+    mkdirSync(outputDir, { recursive: true });
+  }
+
+  const outputFilePath = join(outputDir, "results.json");
+  writeFileSync(outputFilePath, JSON.stringify(results, null, 2), "utf-8");
+
+  console.log("Done!");
+
   return results;
 }
 
-export default readExcelFile;
+parseExcelFile();
+
+export default parseExcelFile;
